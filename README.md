@@ -12,11 +12,11 @@ The Logging Library currently provides the following features:
 
 - **Log to File:** Support writing log messages to a file in addition to printing them to the console. This allows for persistent logging and easier analysis of the logs over time.
 
+- **Log Filtering:** Enable filtering of log messages based on their log levels, allowing you to control which log messages are displayed or saved based on their severity.
+
 ### Planned Features
 
 The following features are planned to be added soon:
-
-- **Log Filtering:** Enable filtering of log messages based on their log levels, allowing you to control which log messages are displayed or saved based on their severity.
 
 - **Exception Handling:** Enhance the library to catch and log exceptions automatically, providing valuable information for debugging and error analysis.
 
