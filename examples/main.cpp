@@ -2,7 +2,7 @@
 
 int main(){
 	Logger::setLogLevel(INFO);
-	Logger::setMessageFormat("[{timestamp}] {level} - {message}");
+	Logger::setMessageFormat("[{timestamp}] {level}: {message}");
 	Logger::setTimestampFormat("%Y-%m-%d %I:%M:%S %p");
 	Logger::setLogFile("log.txt");
 	Logger::info("This is a info program");

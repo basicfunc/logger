@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "../include/logger.h"
+#include "logger.h"
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -53,36 +53,22 @@ void Logger::setMessageFormat(const std::string& format) {
 }
 
 void Logger::setLogFile(const std::string& filename) {
-  logFile.close();  // Close the existing log file, if any
+  if (logFile.is_open()) logFile.close();  // Close the existing log file, if any
   logFile.open(filename, std::ios::out | std::ios::app);
 }
 
 void Logger::log(LogLevel level, const std::string& message) {
   if (level >= logLevel) {
     std::string prefix;
-    std::string colorCode;
-    std::string resetCode;
     switch (level) {
       case INFO:
-        prefix = "[INFO]: ";
-        colorCode = "\033[1;34m";  // Blue color for INFO
-        resetCode = "\033[0m";
-        
-        prefix = colorCode + prefix + resetCode;
+        prefix = "\033[1;34m[INFO]\033[0m";
         break;
       case ERR:
-        prefix = "[ERROR]:";
-        colorCode = "\033[1;31m";  // Red color for ERROR
-        resetCode = "\033[0m";
-
-        prefix = colorCode + prefix + resetCode;
+        prefix = "\033[1;31m[ERROR]\033[0m";
         break;
       case WARN:
-        prefix = "[WARN]: ";
-        colorCode = "\033[1;33m";  // Yellow color for WARN
-        resetCode = "\033[0m";
-
-        prefix = colorCode + prefix + resetCode;
+        prefix = "\033[1;33m[WARN]\033[0m";
         break;
     }
 

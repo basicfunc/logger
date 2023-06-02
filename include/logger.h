@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-enum LogLevel { INFO, ERR, WARN };
+enum LogLevel { INFO, ERR, WARN};
 
 class Logger {
 public:
