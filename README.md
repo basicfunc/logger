@@ -6,9 +6,7 @@ The `logger` is a simple logging library written in C++ that provides an easy-to
 
 The Logging Library currently provides the following features:
 
-- **Logging Levels:** Log messages can be categorized into different levels such as INFO, WARNING, and ERROR, allowing you to control the verbosity of the logs.
-
-- **Basic Logging:** You can use the library to log messages using simple macros such as `LOG_INFO`, `LOG_WARNING`, and `LOG_ERROR`, providing a convenient way to add log statements in your code.
+- **Basic Logging with Levels:** Log messages can be categorized into different levels such as `INFO`,` WARNING`, and `ERROR`, allowing you to control the verbosity of the logs while providing a convenient way to add log statements in your code.
 
 - **Log Formatting:** Customize the format of log messages, allowing you to include timestamps, log levels, and additional contextual information in the log output.
 
