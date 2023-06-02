@@ -1,4 +1,5 @@
 # logger - A simple logging library
+![Build](https://github.com/basicfunc/logger/actions/workflows/cmake.yml/badge.svg)
 
 The `logger` is a simple logging library written in C++ that provides an easy-to-use interface for logging messages in your applications. It aims to be platform-independent and does not rely on any external libraries.
 
