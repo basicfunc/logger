@@ -1,6 +1,7 @@
 #include <chrono>
 #include <ctime>
 #include <iostream>
+#include <fstream>
 #include <string>
 #include "../include/logger.h"
 
@@ -9,17 +10,6 @@
 #include <windows.h>
 #endif
 
-LogLevel Logger::logLevel = INFO;
-std::string Logger::timestampFormat = "";
-std::string Logger::messageFormat = "{timestamp} {level} {message}";
-
-
-void replacePlaceholder(std::string& str, const std::string& placeholder, const std::string& value) {
-  size_t pos = str.find(placeholder);
-  if (pos != std::string::npos) {
-    str.replace(pos, placeholder.length(), value);
-  }
-}
 
 std::string getFormattedTimestamp(std::string& timestampFormat) {
   if (!timestampFormat.empty()) {
@@ -37,6 +27,18 @@ std::string getFormattedTimestamp(std::string& timestampFormat) {
   return "";
 }
 
+void replacePlaceholder(std::string& str, const std::string& placeholder, const std::string& value) {
+  size_t pos = str.find(placeholder);
+  if (pos != std::string::npos) {
+    str.replace(pos, placeholder.length(), value);
+  }
+}
+
+
+LogLevel Logger::logLevel = INFO;
+std::string Logger::timestampFormat = "";
+std::string Logger::messageFormat = "{timestamp} {level}: {message}";
+std::ofstream Logger::logFile;
 
 void Logger::setLogLevel(LogLevel level) {
   logLevel = level;
@@ -50,18 +52,37 @@ void Logger::setMessageFormat(const std::string& format) {
   messageFormat = format;
 }
 
+void Logger::setLogFile(const std::string& filename) {
+  logFile.close();  // Close the existing log file, if any
+  logFile.open(filename, std::ios::out | std::ios::app);
+}
+
 void Logger::log(LogLevel level, const std::string& message) {
   if (level >= logLevel) {
     std::string prefix;
+    std::string colorCode;
+    std::string resetCode;
     switch (level) {
       case INFO:
-        prefix = "\033[1m[INFO]:  \033[0m";
+        prefix = "[INFO]: ";
+        colorCode = "\033[1;34m";  // Blue color for INFO
+        resetCode = "\033[0m";
+        
+        prefix = colorCode + prefix + resetCode;
         break;
       case ERR:
-        prefix = "\033[1;33m[ERROR]: \033[0m";
+        prefix = "[ERROR]:";
+        colorCode = "\033[1;31m";  // Red color for ERROR
+        resetCode = "\033[0m";
+
+        prefix = colorCode + prefix + resetCode;
         break;
       case WARN:
-        prefix = "\033[1;31m[WARN]:  \033[0m";
+        prefix = "[WARN]: ";
+        colorCode = "\033[1;33m";  // Yellow color for WARN
+        resetCode = "\033[0m";
+
+        prefix = colorCode + prefix + resetCode;
         break;
     }
 
@@ -79,12 +100,17 @@ void Logger::log(LogLevel level, const std::string& message) {
     WORD oldColorAttrs = csbi.wAttributes;
 
     SetConsoleTextAttribute(hConsole, FOREGROUND_INTENSITY);
-    std::cout << "\033[0m" << logMessage << std::endl;
+    std::cout << logMessage << std::endl;
 
     SetConsoleTextAttribute(hConsole, oldColorAttrs);
 #else
-    std::cout << "\033[0m" << logMessage << std::endl;
+    std::cout << logMessage << std::endl;
 #endif
+
+    if (logFile.is_open()) {
+      logFile << logMessage << std::endl;
+      logFile.flush();
+    }
   }
 }
 
