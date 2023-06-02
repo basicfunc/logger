@@ -10,11 +10,11 @@ The Logging Library currently provides the following features:
 
 - **Basic Logging:** You can use the library to log messages using simple macros such as `LOG_INFO`, `LOG_WARNING`, and `LOG_ERROR`, providing a convenient way to add log statements in your code.
 
+- **Log Formatting:** Customize the format of log messages, allowing you to include timestamps, log levels, and additional contextual information in the log output.
+
 ### Planned Features
 
 The following features are planned to be added soon:
-
-- **Log Formatting:** Customize the format of log messages, allowing you to include timestamps, log levels, and additional contextual information in the log output.
 
 - **Log Filtering:** Enable filtering of log messages based on their log levels, allowing you to control which log messages are displayed or saved based on their severity.
 
@@ -28,7 +28,7 @@ The following features are planned to be added soon:
 
 To use the Logging Library in your project, follow these steps:
 
-- Copy the `logger.h` and `logger.cpp` header file into your project's include directory and change `CMakeLists.txt` accordingly so that it can compile your project and link against the Library.
+- Copy the `logger.h` and `logger.cpp` header file into your project's include directory and add `CMakeLists.txt` accordingly so that it can compile your project and link against the Library.
 
 ## License
 
