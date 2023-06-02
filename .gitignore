@@ -1,3 +1,14 @@
+# For Build Directory
 build
+
+# For Clangd cache
+.cache
+
+# For Executables
 *.exe
+
+# For log files.
 *.txt
+
+# For compile_commands.json
+*.json
