@@ -10,13 +10,13 @@ The Logging Library currently provides the following features:
 
 - **Log Formatting:** Customize the format of log messages, allowing you to include timestamps, log levels, and additional contextual information in the log output.
 
+- **Log to File:** Support writing log messages to a file in addition to printing them to the console. This allows for persistent logging and easier analysis of the logs over time.
+
 ### Planned Features
 
 The following features are planned to be added soon:
 
 - **Log Filtering:** Enable filtering of log messages based on their log levels, allowing you to control which log messages are displayed or saved based on their severity.
-
-- **Log to File:** Support writing log messages to a file in addition to printing them to the console. This allows for persistent logging and easier analysis of the logs over time.
 
 - **Exception Handling:** Enhance the library to catch and log exceptions automatically, providing valuable information for debugging and error analysis.
 
