@@ -18,9 +18,11 @@ public:
   static void error(const std::string& message);
   static void warn(const std::string& message);
   static void setTimestampFormat(const std::string& format);
+  static void setMessageFormat(const std::string& format);
 private:
   static LogLevel logLevel;
   static std::string timestampFormat;
+  static std::string messageFormat;
 };
 
 #endif // LOGGER_H
