@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 
-enum LogLevel { INFO, WARN, ERR };
+enum LogLevel { INFO, WARN, ERROR };
 
 class Logger {
 public:
@@ -16,31 +16,6 @@ public:
          const std::string &messageFormat = "{timestamp} {level}: {message}")
       : logLevel(level), timestampFormat(timestampFormat),
         messageFormat(messageFormat) {}
-
-  std::string getFormattedTimestamp() {
-    if (!timestampFormat.empty()) {
-      // Get current timestamp
-      auto now = std::chrono::system_clock::now();
-      std::time_t currentTime = std::chrono::system_clock::to_time_t(now);
-
-      // Format the timestamp
-      char buffer[100];
-      std::strftime(buffer, sizeof(buffer), timestampFormat.c_str(),
-                    std::localtime(&currentTime));
-
-      return buffer;
-    }
-
-    return "";
-  }
-
-  void replacePlaceholder(std::string &str, const std::string &placeholder,
-                          const std::string &value) {
-    size_t pos = str.find(placeholder);
-    if (pos != std::string::npos) {
-      str.replace(pos, placeholder.length(), value);
-    }
-  }
 
   void setLogLevel(LogLevel level) { logLevel = level; }
 
@@ -65,7 +40,7 @@ public:
         prefix = "[INFO]";
         colorPrefix = "\033[1;34m[INFO]\033[0m";
         break;
-      case ERR:
+      case ERROR:
         prefix = "[ERROR]";
         colorPrefix = "\033[1;31m[ERROR]\033[0m";
         break;
@@ -95,7 +70,7 @@ public:
 
   void info(const std::string &message) { log(INFO, message); }
 
-  void error(const std::string &message) { log(ERR, message); }
+  void error(const std::string &message) { log(ERROR, message); }
 
   void warn(const std::string &message) { log(WARN, message); }
 
@@ -104,6 +79,33 @@ private:
   std::string timestampFormat;
   std::string messageFormat;
   std::ofstream logFile;
+
+
+  std::string getFormattedTimestamp() {
+    if (!timestampFormat.empty()) {
+      // Get current timestamp
+      auto now = std::chrono::system_clock::now();
+      std::time_t currentTime = std::chrono::system_clock::to_time_t(now);
+
+      // Format the timestamp
+      char buffer[100];
+      std::strftime(buffer, sizeof(buffer), timestampFormat.c_str(),
+                    std::localtime(&currentTime));
+
+      return buffer;
+    }
+
+    return "";
+  }
+
+  void replacePlaceholder(std::string &str, const std::string &placeholder,
+                          const std::string &value) {
+    size_t pos = str.find(placeholder);
+    if (pos != std::string::npos) {
+      str.replace(pos, placeholder.length(), value);
+    }
+  }
+
 };
 
 #endif // LOGGER_H
