@@ -5,6 +5,7 @@
 #include <ctime>
 #include <fstream>
 #include <iostream>
+#include <regex>
 #include <string>
 
 enum LogLevel { INFO, WARN, ERROR };
@@ -14,7 +15,7 @@ public:
   Logger(LogLevel level = INFO,
          const std::string &timestampFormat = "%Y-%m-%d %H:%M:%S",
          const std::string &messageFormat = "{timestamp} {level}: {message}")
-      : logLevel(level), timestampFormat(timestampFormat),
+      : logLevel(level) ,timestampFormat(timestampFormat),
         messageFormat(messageFormat) {}
 
   void setLogLevel(LogLevel level) { logLevel = level; }
@@ -33,19 +34,15 @@ public:
 
   void log(LogLevel level, const std::string &message) {
     if (level >= logLevel) {
-      std::string prefix;
       std::string colorPrefix;
       switch (level) {
       case INFO:
-        prefix = "[INFO]";
         colorPrefix = "\033[1;34m[INFO]\033[0m";
         break;
       case ERROR:
-        prefix = "[ERROR]";
         colorPrefix = "\033[1;31m[ERROR]\033[0m";
         break;
       case WARN:
-        prefix = "[WARN]";
         colorPrefix = "\033[1;33m[WARN]\033[0m";
         break;
       }
@@ -59,12 +56,8 @@ public:
 
       std::cout << logMessage << std::endl;
 
-      std::ofstream logFile("log.txt",
-                            std::ios::app); // Open log file in append mode
-      if (logFile.is_open()) {
-        logFile << logMessage << std::endl;
-        logFile.close();
-      }
+      if (logFile.is_open())
+        writeToFile(logMessage);
     }
   }
 
@@ -74,12 +67,26 @@ public:
 
   void warn(const std::string &message) { log(WARN, message); }
 
+  template <typename T>
+  friend Logger &operator<<(Logger &logger, const T &message) {
+    std::ostringstream oss;
+    oss << message;
+    logger.log(logger.logLevel, oss.str());
+    return logger;
+  }
+
+  friend Logger &operator<<(Logger &logger, std::ostream &(*manip)(std::ostream &)) {
+    std::stringstream ss;
+    ss << manip;
+    logger.log(logger.logLevel, ss.str());
+    return logger;
+  }
+
 private:
   LogLevel logLevel;
   std::string timestampFormat;
   std::string messageFormat;
   std::ofstream logFile;
-
 
   std::string getFormattedTimestamp() {
     if (!timestampFormat.empty()) {
@@ -106,6 +113,15 @@ private:
     }
   }
 
+  void writeToFile(const std::string &logMessage) {
+    std::regex colorCodeRegex("\x1B\\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]");
+    std::string sanitizedLogMessage =
+        std::regex_replace(logMessage, colorCodeRegex, "");
+    if (logFile.is_open()) {
+      logFile << sanitizedLogMessage << std::endl;
+      logFile.flush(); // Flush the buffer to ensure data is written immediately
+    }
+  }
 };
 
 #endif // LOGGER_H
